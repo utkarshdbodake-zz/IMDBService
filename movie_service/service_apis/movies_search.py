@@ -31,14 +31,12 @@ class MovieSearch(APIView):
                                     values_list('id', flat=True))
                 movie_ids.extend(movie_tmp_ids)
                 is_lone_value = False
-                print "movie_name: " + str(movie_ids)
 
             if "director" in request_dict.keys():
                 if movie_ids:
                     movie_tmp_ids = (Movie.objects.filter(director__name__icontains=request_dict['director'],
                                                           id__in=movie_ids).values_list('id', flat=True))
                     movie_ids = list(set(movie_tmp_ids).intersection(movie_ids))
-                    print "director: " + str(movie_ids)
                 elif is_lone_value:
                     movie_ids = (Movie.objects.filter(director__name__icontains=request_dict['director']).
                                     values_list('id', flat=True))
@@ -49,7 +47,6 @@ class MovieSearch(APIView):
                     movie_tmp_ids = (Movie.objects.filter(genre__name__icontains=request_dict['genre'],
                                                           id__in=movie_ids).values_list('id', flat=True))
                     movie_ids = list(set(movie_tmp_ids).intersection(movie_ids))
-                    print "genre: " + str(movie_ids) 
                 elif is_lone_value:
                     movie_ids = (Movie.objects.filter(genre__name__icontains=request_dict['genre']).
                                     values_list('id', flat=True))
@@ -60,7 +57,6 @@ class MovieSearch(APIView):
                     movie_tmp_ids = (Movie.objects.filter(imdb_score=request_dict['imdb_score'],
                                                           id__in=movie_ids).values_list('id', flat=True))
                     movie_ids = list(set(movie_tmp_ids).intersection(movie_ids))
-                    print "imdb_score: " + str(movie_ids) 
                 elif is_lone_value:
                     movie_ids = (Movie.objects.filter(imdb_score=request_dict['imdb_score']).
                                     values_list('id', flat=True))
@@ -71,13 +67,11 @@ class MovieSearch(APIView):
                     movie_tmp_ids = (Movie.objects.filter(popularity=request_dict['popularity'],
                                                           id__in=movie_ids).values_list('id', flat=True))
                     movie_ids = list(set(movie_tmp_ids).intersection(movie_ids))
-                    print "popularity: " + str(movie_ids) 
                 elif is_lone_value:
                     movie_ids = (Movie.objects.filter(popularity=request_dict['popularity']).
                                     values_list('id', flat=True))
                 is_lone_value = False
 
-            print movie_ids
             movies = Movie.objects.filter(id__in=movie_ids)
             if movies:
                 return handle_request(movies)
