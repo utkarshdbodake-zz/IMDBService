@@ -1,0 +1,1 @@
+web: gunicorn IMDB_revamp.wsgi --log-file -
